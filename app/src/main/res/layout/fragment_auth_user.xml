@@ -1,0 +1,107 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/card_view_id"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_gravity="center"
+        card_view:cardCornerRadius="4dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/info_text_id_tok_ttl"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@color/grey_300"
+                android:padding="@dimen/activity_text_padding"
+                android:text="Id Token"
+                android:textColor="@color/grey_600"
+                android:textSize="20dp" />
+
+            <TextView
+                android:id="@+id/info_text_id_tok"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:layout_below="@+id/info_text_id_tok_ttl"
+                android:background="@color/grey_300"
+                android:padding="@dimen/activity_text_padding"
+                android:textColor="@color/grey_600" />
+
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+
+    <TextView
+        android:id="@+id/textViewPlaceHolder6"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/activity_intra_group_separation"
+        android:layout_below="@+id/card_view_id"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true" />
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/card_view_access"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textViewPlaceHolder6"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center"
+        android:background="@color/grey_300"
+        card_view:cardCornerRadius="4dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/info_text_acc_tok_ttl"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@color/grey_600"
+                android:padding="@dimen/activity_text_padding"
+                android:text="Access Token"
+                android:textColor="@color/grey_100"
+                android:textSize="20dp" />
+
+            <TextView
+                android:id="@+id/info_text_acc_tok"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:layout_below="@+id/info_text_acc_tok_ttl"
+                android:background="@color/grey_600"
+                android:padding="@dimen/activity_text_padding"
+                android:textColor="@color/grey_100" />
+
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+
+    <Button
+        android:id="@+id/buttonSignout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/activity_button_height"
+        android:layout_above="@+id/textViewPlaceHolder4So"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:background="@drawable/button_selector"
+        android:text="Sign out"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="20dp" />
+
+    <TextView
+        android:id="@+id/textViewPlaceHolder4So"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/activity_intra_group_separation"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
+        android:text="" />
+
+</RelativeLayout>

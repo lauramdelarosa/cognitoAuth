@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">CognitoAuth</string>
+    <string name="app_main_screen_title">Cognito Auth Demo</string>
+
+    <!-- TODO: Add your Cognito pool details here -->
+    <string name="cognito_web_domain">arkboxdevelop.auth.us-east-2.amazoncognito.com</string>
+    <string name="cognito_client_id">454hdcsoijr8tioldo9f9ad4k</string>
+    <string name="cognito_client_secret">4a413fav1pkjujj06ek3gbkn6tmjvuf8n17t8mqcrt4v9dpnkal</string>
+    <string name="app_redirect">demoapp://demo.cognitoauth.com/signin</string>
+
+    <!-- Values for this demo App -->
+    <string name="app_access_token">access_token</string>
+    <string name="app_id_token">id_token</string>
+</resources>
