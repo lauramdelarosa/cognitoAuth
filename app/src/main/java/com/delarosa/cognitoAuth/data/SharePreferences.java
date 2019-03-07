@@ -1,4 +1,4 @@
-package com.delarosa.cognitoAuth;
+package com.delarosa.cognitoAuth.data;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -11,28 +11,28 @@ public class SharePreferences {
         this.context = context;
     }
 
-    public final static String PREFS_NAME = "appname_prefs";
+    public final static String PREFS_NAME = "preferenciasApp";
 
-    public  void setInt( String key, int value) {
+    public  void setInteger(String key, int value) {
         SharedPreferences sharedPref = context.getSharedPreferences(PREFS_NAME,0);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putInt(key, value);
         editor.apply();
     }
 
-    public  int getInt(String key) {
+    public  int getInteger(String key) {
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, 0);
         return prefs.getInt(key, 0);
     }
 
-    public  void setStr(String key, String value) {
+    public  void setString(String key, String value) {
         SharedPreferences sharedPref = context.getSharedPreferences(PREFS_NAME,0);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString(key, value);
         editor.apply();
     }
 
-    public  String getStr(String key) {
+    public  String getString(String key) {
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, 0);
         return prefs.getString(key,"DNF");
     }

@@ -1,4 +1,4 @@
-package com.delarosa.cognitoAuth;
+package com.delarosa.cognitoAuth.view;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -6,6 +6,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+
+import com.delarosa.cognitoAuth.data.AuthUtils;
+import com.delarosa.cognitoAuth.R;
+import com.delarosa.cognitoAuth.data.SharePreferences;
 
 public class MainActivity extends AppCompatActivity {
     private static final String ISLOGGED = "isLogged";

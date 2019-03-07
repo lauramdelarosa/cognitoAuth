@@ -1,4 +1,4 @@
-package com.delarosa.cognitoAuth;
+package com.delarosa.cognitoAuth.data;
 
 import android.net.Uri;
 import android.util.Log;
@@ -22,13 +22,20 @@ public class AuthUtils {
         }
     }
 
+    /**
+     * guarda la sesion
+     * @param builder
+     */
     public static void buildAuth(Auth.Builder builder) {
 
         auth = builder.build();
 
     }
 
-
+    /**
+     * obtiene los tokens
+     * @param data
+     */
     public static void getTokens(Uri data) {
         auth.getTokens(data);
     }
