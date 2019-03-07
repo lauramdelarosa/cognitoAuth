@@ -1,163 +1,49 @@
 package com.delarosa.cognitoAuth;
 
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AlertDialog;
+import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.widget.ImageView;
+import android.view.View;
+import android.widget.Button;
 
-import com.amazonaws.mobileconnectors.cognitoauth.Auth;
-import com.amazonaws.mobileconnectors.cognitoauth.AuthUserSession;
-import com.amazonaws.mobileconnectors.cognitoauth.handlers.AuthHandler;
-import com.delarosa.cognitoAuth.fragments.AuthUserFragment;
-import com.delarosa.cognitoAuth.fragments.UnAuthUserFragment;
+public class MainActivity extends AppCompatActivity {
 
-public class MainActivity extends FragmentActivity implements OnFragmentInteractionListener {
-    private static final String TAG = "CognitoAuthDemo";
-    private Auth auth;
-    private AlertDialog userDialog;
-    private Uri appRedirect;
+    private Button userButton;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        initCognito();
-        setNewUserFragment();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Intent activityIntent = getIntent();
-        //  -- Call Auth.getTokens() to get Cognito JWT --
-        if (activityIntent.getData() != null &&
-                appRedirect.getHost().equals(activityIntent.getData().getHost())) {
-            auth.getTokens(activityIntent.getData());
+        Bundle tokens = getIntent().getExtras();
+        String accessToken = "";
+        String IdToken = "";
+        if (tokens != null) {
+            accessToken = tokens.getString(getString(R.string.app_access_token));
+            IdToken = tokens.getString(getString(R.string.app_id_token));
         }
-    }
+        Log.i("TOKEN", "Id Token" + IdToken);
+        Log.i("TOKEN", "Access Token" + accessToken);
 
-    /**
-     * Sets new user fragment on the screen.
-     */
-    private void setNewUserFragment() {
-        UnAuthUserFragment newUserFragment = new UnAuthUserFragment();
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.frameLayoutContainer, newUserFragment);
-        transaction.commit();
-        setScreenImages();
-    }
 
-    /**
-     * Sets auth user fragment.
-     *
-     * @param session {@link AuthUserSession} containing tokens for a user.
-     */
-    private void setAuthUserFragment(AuthUserSession session) {
-        AuthUserFragment userFragment = new AuthUserFragment();
-
-        Bundle fragArgs = new Bundle();
-        fragArgs.putString(getString(R.string.app_access_token), session.getAccessToken().getJWTToken());
-        fragArgs.putString(getString(R.string.app_id_token), session.getIdToken().getJWTToken());
-        userFragment.setArguments(fragArgs);
-
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.frameLayoutContainer, userFragment);
-        transaction.commit();
-        setScreenImages();
-    }
-
-    /**
-     * Handles button press.
-     *
-     * @param signIn When {@code True} this performs sign-in.
-     */
-    public void onButtonPress(boolean signIn) {
-        Log.d(" -- ", "Button press: " + signIn);
-        if (signIn) {
-            this.auth.getSession();
-        } else {
-            this.auth.signOut();
-        }
-    }
-
-    @Override
-    public void showPopup(String title, String content) {
-        showDialogMessage(title, content);
-    }
-
-    /**
-     * Setup authentication with Cognito.
-     */
-    void initCognito() {
-        //  -- Create an instance of Auth --
-        Auth.Builder builder = new Auth.Builder().setAppClientId(getString(R.string.cognito_client_id))
-                .setAppClientSecret(getString(R.string.cognito_client_secret))
-                .setAppCognitoWebDomain(getString(R.string.cognito_web_domain))
-                .setApplicationContext(getApplicationContext())
-                .setAuthHandler(new callback())
-                .setSignInRedirect(getString(R.string.app_redirect))
-                .setSignOutRedirect(getString(R.string.app_redirect));
-        this.auth = builder.build();
-        appRedirect = Uri.parse(getString(R.string.app_redirect));
-    }
-
-    /**
-     * Show an popup dialog.
-     *
-     * @param title
-     * @param body
-     */
-    private void showDialogMessage(String title, String body) {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(title).setMessage(body).setNeutralButton("OK", new DialogInterface.OnClickListener() {
+        userButton = (Button) findViewById(R.id.buttonSignout);
+        userButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                try {
-                    userDialog.dismiss();
-
-                } catch (Exception e) {
-                    // Log failure
-                    Log.e(TAG, "Dialog failure", e);
-                }
+            public void onClick(View v) {
+                onButtonPressed();
             }
         });
-        userDialog = builder.create();
-        userDialog.show();
+
+
     }
 
-    /**
-     * Sets images on the screen.
-     */
-    private void setScreenImages() {
-        ImageView cognitoLogo = (ImageView) findViewById(R.id.imageViewCognito);
-        cognitoLogo.setImageDrawable(getDrawable(R.mipmap.ic_launcher));
-    }
 
     /**
-     * Callback handler for Amazon Cognito.
+     *
      */
-    class callback implements AuthHandler {
+    public void onButtonPressed() {
+        AuthUtils.onButtonPress(false);
 
-        @Override
-        public void onSuccess(AuthUserSession authUserSession) {
-            // Show tokens for the authenticated user
-            setAuthUserFragment(authUserSession);
-        }
 
-        @Override
-        public void onSignout() {
-            // Back to new user screen.
-            setNewUserFragment();
-        }
-
-        @Override
-        public void onFailure(Exception e) {
-            Log.e(TAG, "Failed to auth", e);
-        }
     }
 }
