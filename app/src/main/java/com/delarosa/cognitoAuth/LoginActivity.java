@@ -1,11 +1,9 @@
 package com.delarosa.cognitoAuth;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -16,16 +14,23 @@ import com.amazonaws.mobileconnectors.cognitoauth.handlers.AuthHandler;
 
 public class LoginActivity extends FragmentActivity {
     private static final String TAG = "CognitoAuthDemo";
-    private AlertDialog userDialog;
+
     private Uri appRedirect;
     private Button userButton;
-
+    private SharePreferences sharePreferences;
+    private static final String ISLOGGED = "isLogged";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         initCognito();
-        setNewUserFragment();
+        sharePreferences = new SharePreferences(this);
+        if (sharePreferences.getBoolean(ISLOGGED)) {
+            intentMainActivity(null);
+        } else {
+            setNewUserFragment();
+        }
+
     }
 
     @Override
@@ -46,7 +51,7 @@ public class LoginActivity extends FragmentActivity {
         userButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onButtonPressed();
+                AuthUtils.onButtonPress(true);
             }
         });
     }
@@ -56,26 +61,17 @@ public class LoginActivity extends FragmentActivity {
      *
      * @param session {@link AuthUserSession} containing tokens for a user.
      */
-    private void setAuthUserFragment(AuthUserSession session) {
-
+    private void intentMainActivity(AuthUserSession session) {
+        sharePreferences.setBoolean(ISLOGGED, true);
         Intent intentToMainActivity = new Intent(this, MainActivity.class);
-        intentToMainActivity.putExtra(getString(R.string.app_access_token), session.getAccessToken().getJWTToken());
-        intentToMainActivity.putExtra(getString(R.string.app_id_token), session.getIdToken().getJWTToken());
+        if (session != null) {
+            intentToMainActivity.putExtra(getString(R.string.app_access_token), session.getAccessToken().getJWTToken());
+            intentToMainActivity.putExtra(getString(R.string.app_id_token), session.getIdToken().getJWTToken());
+        }
+
         startActivity(intentToMainActivity);
-
-
     }
 
-    public void onButtonPressed() {
-        AuthUtils.onButtonPress(true);
-    }
-
-
-    /*@Override
-    public void showPopup(String title, String content) {
-        showDialogMessage(title, content);
-    }
-*/
 
     /**
      * Setup authentication with Cognito.
@@ -93,30 +89,6 @@ public class LoginActivity extends FragmentActivity {
         appRedirect = Uri.parse(getString(R.string.app_redirect));
     }
 
-    /**
-     * Show an popup dialog.
-     *
-     * @param title
-     * @param body
-     */
-    private void showDialogMessage(String title, String body) {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(title).setMessage(body).setNeutralButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                try {
-                    userDialog.dismiss();
-
-                } catch (Exception e) {
-                    // Log failure
-                    Log.e(TAG, "Dialog failure", e);
-                }
-            }
-        });
-        userDialog = builder.create();
-        userDialog.show();
-    }
-
 
     /**
      * Callback handler for Amazon Cognito.
@@ -126,7 +98,7 @@ public class LoginActivity extends FragmentActivity {
         @Override
         public void onSuccess(AuthUserSession authUserSession) {
             // Show tokens for the authenticated user
-            setAuthUserFragment(authUserSession);
+            intentMainActivity(authUserSession);
         }
 
         @Override

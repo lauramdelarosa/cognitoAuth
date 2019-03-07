@@ -8,13 +8,15 @@ import android.view.View;
 import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
-
+    private static final String ISLOGGED = "isLogged";
     private Button userButton;
+    private SharePreferences sharePreferences;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        sharePreferences = new SharePreferences(this);
         Bundle tokens = getIntent().getExtras();
         String accessToken = "";
         String IdToken = "";
@@ -30,20 +32,13 @@ public class MainActivity extends AppCompatActivity {
         userButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onButtonPressed();
+                sharePreferences.setBoolean(ISLOGGED, false);
+                AuthUtils.onButtonPress(false);
+
             }
         });
 
-
     }
 
 
-    /**
-     *
-     */
-    public void onButtonPressed() {
-        AuthUtils.onButtonPress(false);
-
-
-    }
 }
