@@ -1,11 +1,14 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-android'
+apply plugin: 'com.google.gms.google-services'
 
 android {
-    compileSdkVersion 25
+    compileSdkVersion 26
     defaultConfig {
         applicationId "com.delarosa.cognitoAuth"
-        minSdkVersion 21
-        targetSdkVersion 25
+        minSdkVersion 14
+        targetSdkVersion 26
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -18,10 +21,11 @@ android {
     }
 }
 
-def androidLibraryVersion='25.4.0'
+def androidLibraryVersion = '25.4.0'
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.google.firebase:firebase-messaging:17.3.2'
     androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
@@ -29,12 +33,17 @@ dependencies {
     implementation "com.android.support:cardview-v7:${androidLibraryVersion}"
     implementation "com.android.support:support-v4:${androidLibraryVersion}"
 
+    implementation 'com.android.support:recyclerview-v7:26.1.0'
+    implementation 'com.android.support:cardview-v7:26.1.0'
+
     // Required for Cognito
-    implementation ('com.amazonaws:aws-android-sdk-cognitoauth:2.11.+@aar') { transitive = true}
+    implementation('com.amazonaws:aws-android-sdk-cognitoauth:2.11.+@aar') { transitive = true }
     implementation "com.android.support:customtabs:${androidLibraryVersion}"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
-repositories {
+/*repositories {
     flatDir {
         dirs 'libs'
     }
-}
+    mavenCentral()
+}*/

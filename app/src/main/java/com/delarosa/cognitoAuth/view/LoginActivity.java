@@ -11,9 +11,9 @@ import android.widget.Button;
 import com.amazonaws.mobileconnectors.cognitoauth.Auth;
 import com.amazonaws.mobileconnectors.cognitoauth.AuthUserSession;
 import com.amazonaws.mobileconnectors.cognitoauth.handlers.AuthHandler;
-import com.delarosa.cognitoAuth.data.AuthUtils;
+import com.delarosa.cognitoAuth.model.AuthUtils;
 import com.delarosa.cognitoAuth.R;
-import com.delarosa.cognitoAuth.data.SharePreferences;
+import com.delarosa.cognitoAuth.model.SharePreferences;
 
 public class LoginActivity extends FragmentActivity {
     private static final String TAG = "CognitoAuthDemo";

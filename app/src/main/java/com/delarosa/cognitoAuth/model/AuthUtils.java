@@ -1,4 +1,4 @@
-package com.delarosa.cognitoAuth.data;
+package com.delarosa.cognitoAuth.model;
 
 import android.net.Uri;
 import android.util.Log;
