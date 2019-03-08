@@ -24,7 +24,6 @@ import com.google.firebase.messaging.FirebaseMessaging
 class MainActivity : AppCompatActivity() {
     private var userButton: Button? = null
     private var sharePreferences: SharePreferences? = null
-    private var TAG = "MyFirebase"
     lateinit var recyclerView: RecyclerView
     lateinit var db: DataBaseHandler
 
@@ -39,13 +38,13 @@ class MainActivity : AppCompatActivity() {
             accessToken = tokens.getString(getString(R.string.app_access_token))
             IdToken = tokens.getString(getString(R.string.app_id_token))
         }
-        Log.i("TOKEN", "Id Token" + IdToken!!)
-        Log.i("TOKEN", "Access Token" + accessToken!!)
+        Log.i("COGNITO TOKEN", "Id Token" + IdToken!!)
+        Log.i("COGNITO TOKEN", "Access Token" + accessToken!!)
 
 
         userButton = findViewById(R.id.buttonSignout) as Button
 
-        recyclerView = findViewById(R.id.notification_recyclerView) as RecyclerView
+        recyclerView = findViewById<RecyclerView>(R.id.notification_recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this, LinearLayout.VERTICAL, true)
 
         db = DataBaseHandler(this)
@@ -83,7 +82,7 @@ class MainActivity : AppCompatActivity() {
 
         FirebaseMessaging.getInstance().isAutoInitEnabled = true
         if (intent.extras != null) {
-            Log.d(TAG, "intent : " + intent.extras)
+            Log.d(com.delarosa.cognitoAuth.model.services.TAG, "intent : " + intent.extras)
         }
     }
 }

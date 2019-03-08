@@ -22,11 +22,20 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 const val REFRESH_UI = "RefreshUi"
+const val TAG = "MyFirebase"
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
 
-    val localBroadcastManager = LocalBroadcastManager.getInstance(this)
     val CHANNEL_ID = "om.delarosa.cognitoAuth"
+
+    override fun onNewToken(token: String) {
+        Log.d(TAG, "Refreshed token: " + token)
+
+        // If you want to send messages to this application instance or
+        // manage this apps subscriptions on the server side, send the
+        // Instance ID token to your app server.
+        /*  sendRegistrationToServer(token);*/
+    }
 
     override fun onMessageReceived(remoteMessage: RemoteMessage?) {
         Log.d(TAG, " onMessageReceived ")
@@ -46,7 +55,9 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
     }
 
+
     private fun refreshUI() {
+        val localBroadcastManager = LocalBroadcastManager.getInstance(this)
         localBroadcastManager.sendBroadcast(Intent(REFRESH_UI))
     }
 
@@ -57,61 +68,62 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         db.insertData(Notification(time, description))
     }
 
-
     private fun buildNotification(title: String, description: String) {
 
         val intent = Intent(this, MainActivity::class.java)
         intent.putExtra("fromNotification", true)
         val contentIntent = PendingIntent.getActivity(
-            this,
-            System.currentTimeMillis().toInt(),
-            intent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_CANCEL_CURRENT
+                this,
+                System.currentTimeMillis().toInt(),
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_CANCEL_CURRENT
         )
         val notificationBuilder = NotificationCompat.Builder(this, CHANNEL_ID)
         val notiStyle = NotificationCompat.BigPictureStyle()
         notiStyle.setSummaryText(description)
         val defaultSoundUri =
-            RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+                RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
         val SUMMARY_ID = 0
         val channelName = "push notification"
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         if (VERSION.SDK_INT >= VERSION_CODES.O) {
             notificationBuilder
-                .setSmallIcon(R.drawable.notification_icon)
-                .setContentTitle(title)
-                .setContentText(description)
-                .setStyle(NotificationCompat.BigTextStyle().bigText(description))
-                .setColor(ContextCompat.getColor(applicationContext, R.color.colorPrimaryDark))
-                .setSound(defaultSoundUri)
-                .setGroup(CHANNEL_ID)
-                .setContentIntent(contentIntent)
+                    .setSmallIcon(R.drawable.notification_icon)
+                    .setContentTitle(title)
+                    .setContentText(description)
+                    .setStyle(NotificationCompat.BigTextStyle().bigText(description))
+                    .setColor(ContextCompat.getColor(applicationContext, R.color.colorPrimaryDark))
+                    .setSound(defaultSoundUri)
+                    .setGroup(CHANNEL_ID)
+                    .setContentIntent(contentIntent)
         } else {
             notificationBuilder
-                .setSmallIcon(R.drawable.notification_icon)
-                .setContentTitle(title)
-                .setContentText(description)
-                .setStyle(NotificationCompat.BigTextStyle().bigText(description))
-                .setSound(defaultSoundUri)
-                .setGroup(CHANNEL_ID)
-                .setContentIntent(contentIntent)
+                    .setSmallIcon(R.drawable.notification_icon)
+                    .setContentTitle(title)
+                    .setContentText(description)
+                    .setStyle(NotificationCompat.BigTextStyle().bigText(description))
+                    .setSound(defaultSoundUri)
+                    .setGroup(CHANNEL_ID)
+                    .setContentIntent(contentIntent)
         }
 
         val summaryNotification = NotificationCompat.Builder(this, CHANNEL_ID)
-            .setContentTitle(channelName)
-            .setSmallIcon(R.drawable.notification_icon)
-            .setGroup(CHANNEL_ID)
-            .setGroupSummary(true)
-            .build()
+                .setContentTitle(channelName)
+                .setSmallIcon(R.drawable.notification_icon)
+                .setGroup(CHANNEL_ID)
+                .setGroupSummary(true)
+                .build()
 
         NotificationManagerCompat.from(this).apply {
             notify(SUMMARY_ID, summaryNotification)
 
         }
         notificationManager!!.notify(
-            System.currentTimeMillis().toInt() ,
-            notificationBuilder.build()
+                System.currentTimeMillis().toInt(),
+                notificationBuilder.build()
         )
     }
+
+
 }
